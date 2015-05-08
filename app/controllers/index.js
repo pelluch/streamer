@@ -8,12 +8,12 @@ var url = 'rtsp://edge-cl.edge.mdstrm.com:80/tvn-live/285a5c6dade574d5f111419c85
 function play(e) {
 	var opened = Ti.Platform.openURL(url);
 	if(!opened) {
-		alert('No tiene una aplicación que pueda abrirlo');
-	}	
+		videoPlayer();
+	}
 }
 
 
-function videoPlayer(e) {
+function videoPlayer() {
 	if(OS_ANDROID) {
 		var player = Ti.Media.createVideoPlayer({
 			fullscreen: true,
