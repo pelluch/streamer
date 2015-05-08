@@ -1,5 +1,5 @@
 <Alloy>
-	<Window class="container" layout="vertical" onOpen="onOpen">
+	<Window class="container" layout="vertical" >
 		<Button title="Play" onClick="play" />
 		<Button title="Video Player" onClick="videoPlayer" />
 		<Button title="Pause" onClick="stop" />
