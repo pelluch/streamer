@@ -12,9 +12,6 @@ function play(e) {
 	}	
 }
 
-function stop(e) {
-
-}
 
 function videoPlayer(e) {
 	if(OS_ANDROID) {
@@ -25,22 +22,37 @@ function videoPlayer(e) {
 			scalingMode : Titanium.Media.VIDEO_SCALING_ASPECT_FILL,
 			url: url
 		});
+		var label = Ti.UI.createLabel({
+			text: "Cargando...",
+			color: 'white'
+		});
+		player.add(label);
 		player.addEventListener('load', function(e) {
 			Ti.API.info('loaded');
-		})
+			label.hide();
+		});
 	} else {
 		var player = Ti.Media.createVideoPlayer({
-			autoplay: true,
 			mediaControlStyle : Titanium.Media.VIDEO_CONTROL_FULLSCREEN,
 			scalingMode : Titanium.Media.VIDEO_SCALING_ASPECT_FILL,
 			url: url
 		});
 		var win = Ti.UI.createWindow({
-
+			backgroundColor: 'black'
+		});
+		var label = Ti.UI.createLabel({
+			text: "Cargando...",
+			color: 'white'
 		});
 		win.add(player);
+		win.add(label);
 		win.addEventListener('open', function(e) {
 			player.setFullscreen(true);
+			player.addEventListener('load', function(e) {
+				Ti.API.info('loaded');
+				label.hide();
+			});
+			player.play();
 		});
 		win.open();
 	}
