@@ -1,0 +1,55 @@
+#!/bin/bash
+
+if [ ! -f app/lib/config.js ] && [ -f app/lib/config.js.orig ] ; 
+then
+	cp app/lib/config.js.orig app/lib/config.js
+fi
+
+while getopts apist flag; do
+	case $flag in
+		a)
+			# sed -i -r 's/(Alloy.Globals.Mode = ).*/\1Alloy.Globals.MODE_DEVELOPMENT;/g' app/lib/config.js
+			# sed -i -r 's/(Alloy.Globals.VERBOSE = ).*/\1true;/g' app/lib/config.js
+			titanium build --platform android --force -A /opt/android-sdk -T device -D development \
+			--skip-js-minify -s 3.5.1.GA
+			
+			exit 0
+			;;
+		p)
+			# sed -i -r 's/(Alloy.Globals.Mode = ).*/\1Alloy.Globals.MODE_PRODUCTION;/g' app/lib/config.js
+			# sed -i -r 's/(Alloy.Globals.VERBOSE = ).*/\1false;/g' app/lib/config.js
+			titanium build --platform android --force -A /opt/android-sdk -T dist-playstore \
+			-K keystores/release.keystore -L ewin -P eWin2015 -O dist  -s 3.5.1.GA
+			adb install -r dist/eCheckit.apk
+			adb shell am start -n com.ewin.echeckit/.EcheckitActivity
+			exit 0
+			;;
+		i)
+			titanium build --platform iphone --force --skip-js-minify -D test -T device \
+			-V "Pablo Lluch (724R4LQ58Y)" -F iphone -P ccd12bb6-5117-4bbc-941c-a960d5b397bf
+			exit 0
+			;;
+		t)
+			# rm -f dist/TanFacil.ipa
+			# titanium build --platform iphone --force --skip-js-minify -T dist-adhoc -O dist \
+			# -R "E-WinFactory S.A. (DG9S6YBX5H)" -F iphone —P 4709ad37-9de5-4064-b6cf-c7428e491bbd
+			# ideviceinstaller -i dist/TanFacil.ipa
+			exit 0
+			;;
+		s)
+			titanium build --platform iphone --force --skip-js-minify -T dist-appstore \
+			-R "E-WinFactory S.A. (DG9S6YBX5H)" -F iphone —P 9352881a-8a61-4d13-aed6-dac4775649bd
+			exit 0
+			;;
+
+		?)
+			echo 'Invalid option'
+			echo 'Usage: ./compile -a(ndroid)'
+			exit 1
+			;;
+	esac
+done
+
+echo 'Must specify a flag'
+echo 'Usage: ./compile -a(ndroid)'
+exit 1

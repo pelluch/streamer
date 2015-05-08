@@ -1,0 +1,8 @@
+<Alloy>
+	<Window class="container" layout="vertical" onOpen="onOpen">
+		<Button title="Play" onClick="play" />
+		<Button title="Video Player" onClick="videoPlayer" />
+		<Button title="Pause" onClick="stop" />
+		
+	</Window>
+</Alloy>
